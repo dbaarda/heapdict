@@ -29,11 +29,29 @@ class TestHeap(unittest.TestCase):
         pairs.sort(key=lambda x: x[1], reverse=True)
         return h, pairs, d
     
+    def test_pop(self):
+        # verify that we raise IndexError on empty heapdict
+        empty_heap = heapdict()
+        self.assertRaises(IndexError, empty_heap.pop)
+        # test adding a bunch of random values at random priorities
+        h, pairs, d = self.make_data()
+        last_priority = 0
+        while pairs:
+            v1 = h.pop()
+            (v2, priority) = pairs.pop()
+            # confirm that our heapdict is returning things in sorted order
+            self.assertEqual(v1, v2)
+            # verify that our items are increasing in priority value
+            self.assertGreater(priority, last_priority)
+            last_priority = priority
+        # make sure that we got everythign out of the heap
+        self.assertEqual(len(h), 0)
+
     def test_popitem(self):
         h, pairs, d = self.make_data()
         while pairs:
             v = h.popitem()
-            v2 = pairs.pop(-1)
+            v2 = pairs.pop()
             self.assertEqual(v, v2)
         self.assertEqual(len(h), 0)
 
@@ -51,7 +69,7 @@ class TestHeap(unittest.TestCase):
         while pairs:
             v = h.peekitem()[0]
             h.popitem()
-            v2 = pairs.pop(-1)
+            v2 = pairs.pop()
             self.assertEqual(v, v2[0])
         self.assertEqual(len(h), 0)
 
@@ -73,7 +91,7 @@ class TestHeap(unittest.TestCase):
         del h[k]
         while pairs:
             v = h.popitem()
-            v2 = pairs.pop(-1)
+            v2 = pairs.pop()
             self.assertEqual(v, v2)
         self.assertEqual(len(h), 0)
 
@@ -85,7 +103,7 @@ class TestHeap(unittest.TestCase):
         pairs.sort(key = lambda x: x[1], reverse=True)
         while pairs:
             v = h.popitem()
-            v2 = pairs.pop(-1)
+            v2 = pairs.pop()
             self.assertEqual(v, v2)
         self.assertEqual(len(h), 0)
 

@@ -36,7 +36,7 @@ class heapdict(collections.MutableMapping):
     @doc(dict.__setitem__)
     def __setitem__(self, key, value):
         if key in self.d:
-            self.pop(key)
+            del self[key]
         wrapper = [value, key, len(self)]
         self.d[key] = wrapper
         self.heap.append(wrapper)
@@ -85,6 +85,13 @@ class heapdict(collections.MutableMapping):
     @doc(dict.__iter__)
     def __iter__(self):
         return iter(self.d)
+
+    def pop(self, *args):
+        """D.pop() -> v, remove the key with the lowest value and return the corresponding\nvalue.\nRaises IndexError if list is empty."""
+        if len(self.d) == 0:
+            raise IndexError("pop from empty heapdict")
+        (k, v) = self.popitem()
+        return k
 
     def popitem(self):
         """D.popitem() -> (k, v), remove and return the (key, value) pair with lowest\nvalue; but raise KeyError if D is empty."""
