@@ -44,7 +44,30 @@ class TestHeap(unittest.TestCase):
             # verify that our items are increasing in priority value
             self.assertGreater(priority, last_priority)
             last_priority = priority
-        # make sure that we got everythign out of the heap
+        # make sure that we got everything out of the heap
+        self.assertEqual(len(h), 0)
+        # now verify that we raise KeyError if we try to remove something 
+        # by key that is not present
+        empty_heap = heapdict()
+        self.assertRaises(KeyError, empty_heap.pop, "missing")
+        # verify that we do *not* get a KeyError if we specify a default
+        empty_heap = heapdict()
+        self.assertEqual(empty_heap.pop("missing", 123), 123)
+        # confirm that we can get a value by key if it is present
+        h = heapdict()
+        h["foo"] = 10
+        self.assertEqual(len(h), 1)
+        self.assertEqual(h.pop("foo"), 10)
+        self.assertEqual(len(h), 0)
+        # verify that removing keys does the right thing to a heap
+        h = heapdict()
+        h["c"] = 30
+        h["a"] = 10
+        h["b"] = 20
+        self.assertEqual(len(h), 3)
+        self.assertEqual(h.pop("b"), 20)
+        self.assertEqual(h.pop(), "a")
+        self.assertEqual(h.pop(), "c")
         self.assertEqual(len(h), 0)
 
     def test_popitem(self):

@@ -87,10 +87,17 @@ class heapdict(collections.MutableMapping):
         return iter(self.d)
 
     def pop(self, *args):
-        """D.pop() -> v, remove the key with the lowest value and return the corresponding\nvalue.\nRaises IndexError if list is empty."""
-        if len(self.d) == 0:
-            raise IndexError("pop from empty heapdict")
-        (k, v) = self.popitem()
+        """D.pop([k,[,d]]) -> v, if no key is specified, remove the key with the lowest
+value and return the corresponding value, raising IndexError if list is empty.
+If a key is specified, then it is removed instead if present and the
+corresponding value is returned. If the key is specified and not present, then
+d is returned if given, otherwise KeyError is raised"""
+        if len(args) == 0:
+            if len(self.d) == 0:
+                raise IndexError("pop from empty heapdict")
+            (k, v) = self.popitem()
+        else:
+            k = super(heapdict, self).pop(*args)
         return k
 
     def popitem(self):
