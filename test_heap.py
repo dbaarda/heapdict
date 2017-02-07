@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from __future__ import print_function
-from heapdict import heapdict
 import random
-import unittest
 import sys
+import unittest
+from heapdict import heapdict
 try:
     # Python 3
     import test.support as test_support
@@ -32,7 +32,7 @@ class TestHeap(unittest.TestCase):
         empty_heap = heapdict()
         self.assertRaises(IndexError, empty_heap.pop)
         # test adding a bunch of random values at random priorities
-        h, pairs, d = self.make_data()
+        h, pairs, _ = self.make_data()
         last_priority = 0
         while pairs:
             v1 = h.pop()
@@ -69,7 +69,7 @@ class TestHeap(unittest.TestCase):
         self.assertEqual(len(h), 0)
 
     def test_popitem(self):
-        h, pairs, d = self.make_data()
+        h, pairs, _ = self.make_data()
         while pairs:
             v = h.popitem()
             v2 = pairs.pop()
@@ -81,12 +81,12 @@ class TestHeap(unittest.TestCase):
         for i in range(N):
             h[i] = 0
         for i in range(N):
-            k, v = h.popitem()
+            _, v = h.popitem()
             self.assertEqual(v, 0)
             h._check_invariants()
 
     def test_peek(self):
-        h, pairs, d = self.make_data()
+        h, pairs, _ = self.make_data()
         while pairs:
             v = h.peekitem()[0]
             h.popitem()
@@ -95,19 +95,19 @@ class TestHeap(unittest.TestCase):
         self.assertEqual(len(h), 0)
 
     def test_iter(self):
-        h, pairs, d = self.make_data()
+        h, _, d = self.make_data()
         self.assertEqual(list(h), list(d))
 
     def test_keys(self):
-        h, pairs, d = self.make_data()
+        h, _, d = self.make_data()
         self.assertEqual(list(sorted(h.keys())), list(sorted(d.keys())))
 
     def test_values(self):
-        h, pairs, d = self.make_data()
+        h, _, d = self.make_data()
         self.assertEqual(list(sorted(h.values())), list(sorted(d.values())))
 
     def test_del(self):
-        h, pairs, d = self.make_data()
+        h, pairs, _ = self.make_data()
         k, v = pairs.pop(N//2)
         del h[k]
         while pairs:
@@ -117,7 +117,7 @@ class TestHeap(unittest.TestCase):
         self.assertEqual(len(h), 0)
 
     def test_change(self):
-        h, pairs, d = self.make_data()
+        h, pairs, _ = self.make_data()
         k, v = pairs[N//2]
         h[k] = 0.5
         pairs[N//2] = (k, 0.5)
@@ -129,7 +129,7 @@ class TestHeap(unittest.TestCase):
         self.assertEqual(len(h), 0)
 
     def test_clear(self):
-        h, pairs, d = self.make_data()
+        h, _, _ = self.make_data()
         h.clear()
         self.assertEqual(len(h), 0)
 

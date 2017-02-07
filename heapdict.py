@@ -17,7 +17,7 @@ class heapdict(collections.MutableMapping):
     def _check_invariants(self):
         # the 3rd entry of each heap entry is the position in the heap
         for i, e in enumerate(self.heap):
-            assert(e[2] == i)
+            assert e[2] == i
         # the parent of each heap element must not be larger than the element
         for i in range(1, len(self.heap)):
             parent = (i - 1) >> 1
@@ -103,7 +103,7 @@ d is returned if given, otherwise KeyError is raised"""
         if len(args) == 0:
             if len(self.d) == 0:
                 raise IndexError("pop from empty heapdict")
-            (k, v) = self.popitem()
+            (k, _) = self.popitem()
         else:
             k = super(heapdict, self).pop(*args)
         return k
