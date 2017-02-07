@@ -15,14 +15,6 @@ class heapdict(collections.abc.MutableMapping):
     def _parent(i):
         return ((i - 1) >> 1)
 
-    @staticmethod
-    def _left(i):
-        return ((i << 1) + 1)
-
-    @staticmethod
-    def _right(i):
-        return ((i+1) << 1)    
-    
     def __init__(self, *args, **kw):
         self.heap = []
         self.d = {}
@@ -44,8 +36,10 @@ class heapdict(collections.abc.MutableMapping):
 
     def _min_heapify(self, i):
         while True:
-            l = self._left(i)
-            r = self._right(i)
+            # calculate the offset of the left child
+            l = (i << 1) + 1
+            # calculate the offset of the right child
+            r = (i + 1) << 1
             n = len(self.heap)
             if l < n and self.heap[l][0] < self.heap[i][0]:
                 low = l
