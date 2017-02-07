@@ -44,16 +44,17 @@ class heapdict(collections.MutableMapping):
 
     def _min_heapify(self, i):
         n = len(self.heap)
+        h = self.heap
         while True:
             # calculate the offset of the left child
             l = (i << 1) + 1
             # calculate the offset of the right child
             r = (i + 1) << 1
-            if l < n and self.heap[l][0] < self.heap[i][0]:
+            if l < n and h[l][0] < h[i][0]:
                 low = l
             else:
                 low = i
-            if r < n and self.heap[r][0] < self.heap[low][0]:
+            if r < n and h[r][0] < h[low][0]:
                 low = r
 
             if low == i:
@@ -61,6 +62,7 @@ class heapdict(collections.MutableMapping):
 
             self._swap(i, low)
             i = low
+        self.heap = h
 
     def _decrease_key(self, i):
         while i:
@@ -78,6 +80,7 @@ class heapdict(collections.MutableMapping):
 
     @doc(dict.__delitem__)
     def __delitem__(self, key):
+        # XXX: could we speed this up to avoid always walking tree?
         wrapper = self.d[key]
         while wrapper[2]:
             # calculate the offset of the parent
