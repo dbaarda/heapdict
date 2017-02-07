@@ -114,7 +114,7 @@ d is returned if given, otherwise KeyError is raised"""
         if len(self.heap) == 1:
             self.heap.pop()
         else:
-            self.heap[0] = self.heap.pop(-1)
+            self.heap[0] = self.heap.pop()
             self.heap[0][2] = 0
             self._min_heapify(0)
         del self.d[wrapper[1]]
