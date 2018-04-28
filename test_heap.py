@@ -3,6 +3,8 @@ from __future__ import print_function
 import random
 import sys
 import unittest
+import timeit
+import tempfile
 from heapdict import heapdict
 try:
     # Python 3
@@ -151,3 +153,11 @@ def test_main(verbose=None):
 
 if __name__ == "__main__":
     test_main(verbose=True)
+
+    originout = sys.stdout
+    with tempfile.TemporaryFile(mode="w") as tmp:
+        sys.stdout = tmp
+        total = timeit.timeit("test_main()", number=20, setup="from __main__ import test_main")
+
+    sys.stdout = originout
+    print("Timeit: {} s".format(total))
