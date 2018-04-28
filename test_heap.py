@@ -157,7 +157,7 @@ if __name__ == "__main__":
     originout = sys.stdout
     with tempfile.TemporaryFile(mode="w") as tmp:
         sys.stdout = tmp
-        total = timeit.timeit("test_main()", number=20, setup="from __main__ import test_main")
+        total = min(timeit.repeat("test_main()", number=20, repeat=3, setup="from __main__ import test_main"))
 
     sys.stdout = originout
     print("Timeit: {} s".format(total))
