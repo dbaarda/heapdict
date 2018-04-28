@@ -106,59 +106,22 @@ class heapdict(collections.MutableMapping):
     def __setitem__(self, key, value):
         if key in self.d:
             del self[key]
-        wrapper = [value, key, len(self)]
+        wrapper = [value, key, -2]
         self.d[key] = wrapper
-        self.heap.append(wrapper)
-        self._decrease_key(len(self.heap) - 1)
-
-    def _min_heapify(self, i):
-        n = len(self.heap)
-        h = self.heap
-        while True:
-            # calculate the offset of the left child
-            l = (i << 1) + 1
-            # calculate the offset of the right child
-            r = (i + 1) << 1
-            if l < n and h[l][0] < h[i][0]:
-                low = l
-            else:
-                low = i
-            if r < n and h[r][0] < h[low][0]:
-                low = r
-
-            if low == i:
-                break
-
-            self._swap(i, low)
-            i = low
-        self.heap = h
-
-    def _decrease_key(self, i):
-        while i:
-            # calculate the offset of the parent
-            parent = (i - 1) >> 1
-            if self.heap[parent][0] < self.heap[i][0]:
-                break
-            self._swap(i, parent)
-            i = parent
-
-    def _swap(self, i, j):
-        h = self.heap
-        h[i], h[j] = h[j], h[i]
-        h[i][2] = i
-        h[j][2] = j
-        self.heap = h
+        heappush(self.heap, wrapper)
 
     @doc(dict.__delitem__)
     def __delitem__(self, key):
-        # XXX: could we speed this up to avoid always walking tree?
         wrapper = self.d[key]
-        while wrapper[2]:
-            # calculate the offset of the parent
-            parentpos = (wrapper[2] - 1) >> 1
-            parent = self.heap[parentpos]
-            self._swap(wrapper[2], parent[2])
-        self.popitem()
+        i = wrapper[2]
+        lastindex = len(self.heap) - 1
+        # swap with last item
+        _swap(self.heap, i, lastindex)
+        self.heap.pop()
+        if self.heap and i < lastindex:
+            _siftup(self.heap, i)
+            _siftdown(self.heap, 0, i)
+        del self.d[key]
 
     @doc(dict.__getitem__)
     def __getitem__(self, key):
@@ -184,13 +147,7 @@ d is returned if given, otherwise KeyError is raised"""
 
     def popitem(self):
         """D.popitem() -> (k, v), remove and return the (key, value) pair with lowest\nvalue; but raise KeyError if D is empty."""
-        wrapper = self.heap[0]
-        if len(self.heap) == 1:
-            self.heap.pop()
-        else:
-            self.heap[0] = self.heap.pop()
-            self.heap[0][2] = 0
-            self._min_heapify(0)
+        wrapper = heappop(self.heap)
         del self.d[wrapper[1]]
         return wrapper[1], wrapper[0]
 
