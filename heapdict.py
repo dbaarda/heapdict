@@ -29,7 +29,7 @@ def heappop(heap, i=0):
     returnitem = heap[i]  # raises appropriate IndexError if invalid index.
     lastelt = heap.pop()
     # If we are not returning the last node, put it at i and sift it into place.
-    if lastlt is not returnitem:
+    if lastelt is not returnitem:
         _set(heap, i, lastelt)
         # if lastelt is greater than the previous node, move it down.
         if lastelt[0] > returnitem[0]:
@@ -154,7 +154,7 @@ d is returned if given, otherwise KeyError is raised"""
         if len(args) == 0:
             return self.popitem()[0]
         else:
-            return = super(heapdict, self).pop(*args)
+            return super(heapdict, self).pop(*args)
 
     def popitem(self):
         """D.popitem() -> (k, v), remove and return the (key, value) pair with lowest\nvalue; but raise KeyError if D is empty."""
