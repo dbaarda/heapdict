@@ -20,12 +20,8 @@ class TestHeap(unittest.TestCase):
 
     def make_data(self):
         pairs = [(random.random(), random.random()) for i in range(N)]
-        h = heapdict()
-        d = {}
-        for k, v in pairs:
-            h[k] = v
-            d[k] = v
-
+        h = heapdict(pairs)
+        d = dict(pairs)
         pairs.sort(key=lambda x: x[1], reverse=True)
         return h, pairs, d
 

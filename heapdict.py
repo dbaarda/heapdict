@@ -103,6 +103,7 @@ class heapdict(collections.MutableMapping):
     def __init__(self, *args, **kw):
         self.d = dict(*args, **kw)
         self.heap = [[v, k, i] for (i, (k, v)) in enumerate(self.d.iteritems())]
+        self.d.update((e[1], e) for e in self.heap)
         heapify(self.heap)
 
     @doc(dict.clear)
