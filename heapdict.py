@@ -60,11 +60,10 @@ def _siftdown(heap, pos):
     while pos > 0:
         parentpos = (pos - 1) >> 1
         parent = heap[parentpos]
-        if newitem[0] < parent[0]:
-            _set(heap, pos, parent)
-            pos = parentpos
-            continue
-        break
+        if newitem[0] >= parent[0]:
+            break
+        _set(heap, pos, parent)
+        pos = parentpos
     _set(heap, pos, newitem)
 
 # 'heap' is a heap at all indicies > pos. 'pos' is the index of a node that may
@@ -80,13 +79,12 @@ def _siftup(heap, pos):
         if rightpos < endpos and heap[childpos][0] > heap[rightpos][0]:
             childpos = rightpos
         child = heap[childpos]
-        if newitem[0] > child[0]:
-            # Move the smaller child up.
-            _set(heap, pos, child)
-            pos = childpos
-            childpos = 2 * pos + 1
-            continue
-        break
+        if newitem[0] <= child[0]:
+            break
+        # Move the smaller child up.
+        _set(heap, pos, child)
+        pos = childpos
+        childpos = 2 * pos + 1
     # The node at pos is empty now, put newitem there.
     _set(heap, pos, newitem)
 
