@@ -34,8 +34,8 @@ def heappop(heap, i=0):
         # if lastelt is greater than the previous node, move it down.
         if lastelt[0] > returnitem[0]:
             _siftup(heap, i)
-        # if lastelt is smaller than the previous node, move it up.
-        elif lastelt[0] < returnitem[0]:
+        # otherwise it must be equal or smaller, move it up.
+        else:
             _siftdown(heap, i)
     return returnitem
 
@@ -114,15 +114,15 @@ class heapdict(collections.MutableMapping):
 
     @doc(dict.__setitem__)
     def __setitem__(self, key, value):
-        try:
+        if key in self.d:
             wrapper = self.d[key]
             oldvalue, _, i = wrapper
             wrapper[0] = value
             if oldvalue < value:
                 _siftup(self.heap, i)
-            elif value < oldvalue:
+            else:
                 _siftdown(self.heap, i)
-        except KeyError:
+        else:
             wrapper = [value, key, -2]
             self.d[key] = wrapper
             heappush(self.heap, wrapper)
